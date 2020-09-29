@@ -2,11 +2,11 @@
 Terraform AWS Route53 Healthcheck Module
 
 The module creates: 
-    * SNS Topic
-    * SNS Subscription
-    * Route53 Healthcheck
-    * Cloudwatch Metric Alarm
-    * (optional) Secondary Route53 record for failover routing policy and public S3 website with "Maintenance page"
+* SNS Topic
+* SNS Subscription
+* Route53 Healthcheck
+* Cloudwatch Metric Alarm
+* (optional) Secondary Route53 record for failover routing policy and public S3 website with "Maintenance page"
 
 ### Example:
 ```
