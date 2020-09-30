@@ -27,3 +27,4 @@ module "route53-health-check" {
 
 }
 ```
+Note: This module just creates a secondary Route53 record for failover routing policy. Creating a primary record is out of scope of this module.
