@@ -3,12 +3,14 @@ Terraform AWS Route53 Healthcheck Module
 
 The module creates: 
 * SNS Topic
-* SNS Subscription
+* SNS Subscription (e.g. PagerDuty)
 * Route53 Healthcheck
 * Cloudwatch Metric Alarm
-* (optional) Secondary Route53 record for failover routing policy and public S3 website with "Maintenance page"
+* (optional) Secondary Route53 record for failover routing policy to public S3 website with "Maintenance page"
 
 ### Example:
+We will monitore s3-static-website.s3-website-us-east-1.amazonaws.com with PagetDuty notification with 
+failover routing policy to S3 public website bucket with "Maintenance page" 
 ```
 module "route53-health-check" {
     source  = "hazelops/route53-healthcheck/aws""
@@ -23,7 +25,6 @@ module "route53-health-check" {
     
     r53_failover_enabled  = true
     domain_name           = "example.com"
-    failover_fqdn_target  = "s3-website-us-east-1.amazonaws.com"
 
 }
 ```

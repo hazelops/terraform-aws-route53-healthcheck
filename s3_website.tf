@@ -1,5 +1,6 @@
 # AWS S3 bucket for website static hosting
 resource "aws_s3_bucket" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
   bucket = var.fqdn
   acl    = "public-read"
 
@@ -31,7 +32,27 @@ EOF
 }
 
 resource "aws_s3_bucket_object" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
   key    = "index.html"
-  bucket = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.this[0].id
   source = "${path.module}/index.html"
+  content_type = "text/html"
+}
+
+resource "aws_route53_record" "this" {
+  count   = var.r53_failover_enabled ? 1 : 0
+  zone_id = data.aws_route53_zone.this.zone_id
+  name    = var.fqdn
+  type    = "A"
+
+  alias {
+    name                   = aws_s3_bucket.this[0].website_domain
+    zone_id                = aws_s3_bucket.this[0].hosted_zone_id
+    evaluate_target_health = false
+  }
+
+  failover_routing_policy {
+    type = "SECONDARY"
+  }
+  set_identifier = "${var.fqdn}-SECONDARY"
 }

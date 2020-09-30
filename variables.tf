@@ -94,8 +94,3 @@ variable "r53_failover_enabled" {
   default     = false
   description = "Enabling creating secondary Failover R53 Record"
 }
-
-variable "failover_fqdn_target" {
-  default     = "example.com"
-  description = "FQDN of failover target (Secondary Record of failover routing policy)"
-}

@@ -24,24 +24,6 @@ resource "aws_route53_health_check" "this" {
   }
 }
 
-resource "aws_route53_record" "this" {
-  count   = var.r53_failover_enabled ? 1 : 0
-  zone_id = data.aws_route53_zone.this.zone_id
-  name    = var.fqdn
-  type    = "A"
-
-  alias {
-    name                   = aws_s3_bucket.this.website_domain
-    zone_id                = aws_s3_bucket.this.hosted_zone_id
-    evaluate_target_health = false
-  }
-
-  failover_routing_policy {
-    type = "SECONDARY"
-  }
-  set_identifier = "${var.fqdn}-SECONDARY"
-}
-
 resource "aws_cloudwatch_metric_alarm" "this" {
   alarm_name          = "${var.name}-r53-healthcheck-failed"
   namespace           = var.cw_alarm_namespace
