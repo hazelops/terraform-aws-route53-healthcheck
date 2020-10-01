@@ -10,7 +10,7 @@ The module creates:
 * (optional) S3 public website with "Maintenance page" (bucket name = var.fqdn)
 
 ### Example:
-We will monitor s3-static-website.s3-website-us-east-1.amazonaws.com with PagetDuty notification with 
+We will monitor s3-static-website.s3-website-us-east-1.amazonaws.com with PagerDuty notification with 
 failover routing policy to S3 public website bucket with "Maintenance page" 
 ```
 module "route53-health-check" {
