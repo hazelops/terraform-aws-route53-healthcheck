@@ -1,6 +1,8 @@
 # terraform-aws-route53-healthcheck
 Terraform AWS Route53 Healthcheck Module
 
+Managed by @igorkotof
+
 The module creates: 
 * SNS Topic
 * SNS Subscription (e.g. PagerDuty)
