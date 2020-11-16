@@ -1,9 +1,11 @@
 resource "aws_sns_topic" "this" {
+  count        = var.enabled ? 1 : 0
   name         = "${var.env}-${var.name}-r53-healthcheck"
   display_name = "${var.env}-${var.name}"
 }
 
 resource "aws_sns_topic_subscription" "this" {
+  count                  = var.enabled ? 1 : 0
   endpoint               = var.subscription_endpoint
   endpoint_auto_confirms = var.endpoint_auto_confirms
   protocol               = var.subscription_endpoint_protocol
@@ -11,6 +13,7 @@ resource "aws_sns_topic_subscription" "this" {
 }
 
 resource "aws_route53_health_check" "this" {
+  count             = var.enabled ? 1 : 0
   fqdn              = var.fqdn
   port              = var.port
   type              = var.type
@@ -25,6 +28,7 @@ resource "aws_route53_health_check" "this" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "this" {
+  count               = var.enabled ? 1 : 0
   alarm_name          = "${var.name}-r53-healthcheck-failed"
   namespace           = var.cw_alarm_namespace
   metric_name         = var.cw_alarm_metric_name
@@ -49,11 +53,12 @@ resource "aws_cloudwatch_metric_alarm" "this" {
 /*
 This approach can be used for email SNS subscription: 
 resource "aws_cloudformation_stack" "tf_sns_topic" {
-   name = "EmailSNSTopicStack"
-   template_body = data.template_file.aws_cf_sns_stack.rendered
-   tags = {
-     name = "EmailSNSTopicStack"
-   }
+  count         = var.enabled ? 1 : 0
+  name          = "EmailSNSTopicStack"
+  template_body = data.template_file.aws_cf_sns_stack.rendered
+  tags = {
+    name = "EmailSNSTopicStack"
+  }
 
   # [INFO] Can be updated and implemented for removing email subscription during tf destroy - it's continue 
   # existing after default tf destroy because it was created by the CF stack

@@ -94,3 +94,10 @@ variable "r53_failover_enabled" {
   default     = false
   description = "Enabling creating secondary Failover R53 Record"
 }
+
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Gives ability to enable or disable a module"
+}
+
