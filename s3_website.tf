@@ -2,7 +2,6 @@
 resource "aws_s3_bucket" "this" {
   count  = var.r53_failover_enabled ? 1 : 0
   bucket = var.fqdn
-  acl    = "public-read"
 
   tags = {
     Terraform = "true"
@@ -26,17 +25,23 @@ resource "aws_s3_bucket" "this" {
 }
 EOF
 
-  website {
-    index_document = "index.html"
-  }
 }
 
-resource "aws_s3_bucket_object" "this" {
-  count  = var.r53_failover_enabled ? 1 : 0
-  key    = "index.html"
+resource "aws_s3_bucket_acl" "this" {
   bucket = aws_s3_bucket.this[0].id
-  source = "${path.module}/index.html"
-  content_type = "text/html"
+  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_website_configuration" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
+  bucket = aws_s3_bucket.this[0].id
+
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
 }
 
 resource "aws_route53_record" "this" {
