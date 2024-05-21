@@ -7,7 +7,10 @@ resource "aws_s3_bucket" "this" {
     Terraform = "true"
     Name      = "${var.env}-${var.name}"
   }
+}
 
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.this[0].id
   policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -24,8 +27,8 @@ resource "aws_s3_bucket" "this" {
   ]
 }
 EOF
-
 }
+
 
 resource "aws_s3_bucket_acl" "this" {
   bucket = aws_s3_bucket.this[0].id
@@ -51,7 +54,7 @@ resource "aws_route53_record" "this" {
   type    = "A"
 
   alias {
-    name                   = aws_s3_bucket.this[0].website_domain
+    name                   = aws_s3_bucket_website_configuration.this[0].website_domain
     zone_id                = aws_s3_bucket.this[0].hosted_zone_id
     evaluate_target_health = false
   }
