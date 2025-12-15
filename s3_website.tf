@@ -9,7 +9,39 @@ resource "aws_s3_bucket" "this" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
+  bucket = aws_s3_bucket.this[0].id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
+  bucket = aws_s3_bucket.this[0].id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  count = var.r53_failover_enabled ? 1 : 0
+
+  depends_on = [
+    aws_s3_bucket_ownership_controls.this,
+    aws_s3_bucket_public_access_block.this,
+  ]
+
+  bucket = aws_s3_bucket.this[0].id
+  acl    = "public-read"
+}
+
 resource "aws_s3_bucket_policy" "this" {
+  count  = var.r53_failover_enabled ? 1 : 0
   bucket = aws_s3_bucket.this[0].id
   policy = <<EOF
 {
@@ -27,12 +59,6 @@ resource "aws_s3_bucket_policy" "this" {
   ]
 }
 EOF
-}
-
-
-resource "aws_s3_bucket_acl" "this" {
-  bucket = aws_s3_bucket.this[0].id
-  acl    = "public-read"
 }
 
 resource "aws_s3_bucket_website_configuration" "this" {
