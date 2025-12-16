@@ -1,15 +1,23 @@
 # terraform-aws-route53-healthcheck
 Terraform AWS Route53 Healthcheck Module
 
-Managed by @igorkotof
+> [!NOTE]
+>  This module requires **AWS Provider >= 6.0**. If you're migrating from version 5.x or earlier, please note:
+> - New S3 resources added for public bucket access compliance with AWS Provider 6.x requirements
+> - `aws_s3_bucket_ownership_controls` and `aws_s3_bucket_public_access_block` are now required for public S3 website hosting
+> - For migration guide, see [AWS Provider Version 6 Upgrade Guide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/version-6-upgrade)
 
-The module creates: 
+The module creates:
 * SNS Topic
 * SNS Subscription (e.g. PagerDuty)
 * Route53 Healthcheck
 * Cloudwatch Metric Alarm
 * (optional) Secondary Route53 record for failover routing policy to public S3 website with "Maintenance page"
 * (optional) S3 public website with "Maintenance page" (bucket name = var.fqdn)
+  * S3 Bucket Ownership Controls (for public ACL support)
+  * S3 Bucket Public Access Block configuration (for public website hosting)
+  * S3 Bucket ACL (public-read)
+  * S3 Bucket Policy (public read access)
 
 ### Example:
 We will monitor s3-static-website.s3-website-us-east-1.amazonaws.com with PagerDuty notification with 
@@ -37,14 +45,14 @@ Note: This module just creates a secondary Route53 record for failover routing p
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0 |
 
 ## Modules
 
@@ -59,7 +67,9 @@ No modules.
 | [aws_route53_record.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_ownership_controls.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
 | [aws_s3_bucket_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_public_access_block.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_website_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) | resource |
 | [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
@@ -97,3 +107,5 @@ No modules.
 
 No outputs.
 <!-- END_TF_DOCS -->
+
+Managed by @kobrikx
