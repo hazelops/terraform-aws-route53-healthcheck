@@ -1,15 +1,11 @@
 # terraform-aws-route53-healthcheck
 Terraform AWS Route53 Healthcheck Module
 
-Managed by @igorkotof
-
-## AWS Provider 6.x Compatibility
-
-This module requires **AWS Provider >= 6.0**. If you're migrating from version 5.x or earlier, please note:
-
-- New S3 resources added for public bucket access compliance with AWS Provider 6.x requirements
-- `aws_s3_bucket_ownership_controls` and `aws_s3_bucket_public_access_block` are now required for public S3 website hosting
-- For migration guide, see [AWS Provider Version 6 Upgrade Guide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/version-6-upgrade)
+> [!NOTE]
+>  This module requires **AWS Provider >= 6.0**. If you're migrating from version 5.x or earlier, please note:
+> - New S3 resources added for public bucket access compliance with AWS Provider 6.x requirements
+> - `aws_s3_bucket_ownership_controls` and `aws_s3_bucket_public_access_block` are now required for public S3 website hosting
+> - For migration guide, see [AWS Provider Version 6 Upgrade Guide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/version-6-upgrade)
 
 The module creates:
 * SNS Topic
@@ -111,3 +107,5 @@ No modules.
 
 No outputs.
 <!-- END_TF_DOCS -->
+
+Managed by @kobrikx
